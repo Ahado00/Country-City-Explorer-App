@@ -4,54 +4,75 @@ import android.app.Activity
 import android.os.Build
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Typography
 import androidx.compose.material3.darkColorScheme
 import androidx.compose.material3.dynamicDarkColorScheme
 import androidx.compose.material3.dynamicLightColorScheme
 import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.unit.sp
 
+
+val GreenPrimary = Color(0xFF33573B) // Dark Green (Used in Country List)
+val LightBackground = Color(0xFFFFFFFF) // White
+val DarkBackground = Color(0xFF121212) // Dark Theme Background
+val LightSurface = Color(0xFFE6E6E6) // Light Gray (for cards)
+val DarkSurface = Color(0xFF1E1E1E) // Dark mode card background
+val TextPrimary = Color(0xFFF1F1F1) // Light Text
+
+// Define custom colors for dark and dark themes
 private val DarkColorScheme = darkColorScheme(
-    primary = Purple80,
-    secondary = PurpleGrey80,
-    tertiary = Pink80
-)
-
-private val LightColorScheme = lightColorScheme(
-    primary = Purple40,
-    secondary = PurpleGrey40,
-    tertiary = Pink40
-
-    /* Other default colors to override
-    background = Color(0xFFFFFBFE),
-    surface = Color(0xFFFFFBFE),
+    primary = GreenPrimary,
     onPrimary = Color.White,
-    onSecondary = Color.White,
-    onTertiary = Color.White,
-    onBackground = Color(0xFF1C1B1F),
-    onSurface = Color(0xFF1C1B1F),
-    */
+    background = DarkBackground,
+    surface = DarkSurface,
+    onSurface = TextPrimary
 )
+
+
+// Define custom colors for light and dark themes
+private val LightColorScheme = lightColorScheme(
+    primary = GreenPrimary,
+    onPrimary = Color.White,
+    background = LightBackground,
+    surface = LightSurface,
+    onSurface = Color.Black
+
+)
+
+private val AppTypography = Typography(
+    bodyLarge = TextStyle(
+        fontSize = 20.sp,
+        fontWeight = FontWeight.Bold
+    ),
+    bodyMedium = TextStyle(
+        fontSize = 16.sp,
+        fontWeight = FontWeight.Medium
+    ),
+    bodySmall = TextStyle(
+        fontSize = 14.sp,
+        fontWeight = FontWeight.Light
+    ),
+    titleLarge = TextStyle(
+        fontSize = 28.sp,
+        fontWeight = FontWeight.Bold
+    )
+)
+
 
 @Composable
 fun ExplorerAppTheme(
     darkTheme: Boolean = isSystemInDarkTheme(),
-    // Dynamic color is available on Android 12+
-    dynamicColor: Boolean = true,
     content: @Composable () -> Unit
 ) {
-    val colorScheme = when {
-        dynamicColor && Build.VERSION.SDK_INT >= Build.VERSION_CODES.S -> {
-            val context = LocalContext.current
-            if (darkTheme) dynamicDarkColorScheme(context) else dynamicLightColorScheme(context)
-        }
-
-        darkTheme -> DarkColorScheme
-        else -> LightColorScheme
-    }
+    val colors = if (darkTheme) DarkColorScheme else LightColorScheme
 
     MaterialTheme(
-        colorScheme = colorScheme,
+        colorScheme = colors,
         typography = Typography,
         content = content
     )

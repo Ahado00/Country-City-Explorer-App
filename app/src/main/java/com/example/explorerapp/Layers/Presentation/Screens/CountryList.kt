@@ -14,7 +14,7 @@ import androidx.compose.ui.unit.*
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.example.explorerapp.Layers.Presentation.ViewModel.CountryVM
-import com.example.explorerapp.Layers.Domain.Model.Country
+import com.example.explorerapp.Layers.Data.Model.Country
 
 @Composable
 fun CountryList(
