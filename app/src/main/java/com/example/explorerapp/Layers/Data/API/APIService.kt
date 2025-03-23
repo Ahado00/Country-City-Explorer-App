@@ -12,9 +12,7 @@ interface APIService {
 
     //get the country from API
     @GET("countries")
-    suspend fun getCountryAPI(): CountryResponse
-
-
+    suspend fun getCountries(): CountryResponse
 }
 
 // add Retrofit to fetch the API

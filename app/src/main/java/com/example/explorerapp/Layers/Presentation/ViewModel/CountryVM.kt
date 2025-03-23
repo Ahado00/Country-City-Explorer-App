@@ -1,24 +1,20 @@
 package com.example.explorerapp.Layers.Presentation.ViewModel
 
-
-import android.util.Log
-import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.explorerapp.Layers.Data.API.RetrofitInstance
-import com.example.explorerapp.Layers.Data.Model.Country
+import com.example.explorerapp.Layers.Data.Mapper.toDomain
+import com.example.explorerapp.Layers.Domain.Model.Country
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
-import androidx.compose.runtime.*
 
+class CountryVM : ViewModel() {
+    private val _countries = MutableStateFlow<List<Country>>(emptyList())
+    val countries: StateFlow<List<Country>> = _countries
 
-
-
-class CountryVM : ViewModel(){
-    private val _countries = mutableStateOf<List<Country>>(emptyList())
-    val countries: State<List<Country>> = _countries
-
-    private val _isLoading = mutableStateOf(true)
-    val isLoading: State<Boolean> = _isLoading
+    private val _isLoading = MutableStateFlow(true)
+    val isLoading: StateFlow<Boolean> = _isLoading
 
     init {
         fetchCountries()
@@ -27,16 +23,15 @@ class CountryVM : ViewModel(){
     private fun fetchCountries() {
         viewModelScope.launch {
             try {
-                val response = RetrofitInstance.api.getCountryAPI()
+                val response = RetrofitInstance.api.getCountries()
                 if (!response.error) {
-                    _countries.value = response.data
+                    _countries.value = response.data.map { it.toDomain() }  // ✅ Use the mapper here
                 }
             } catch (e: Exception) {
-                Log.e("CountryVM", "Error fetching countries: ${e.message}")
+                e.printStackTrace()
             } finally {
                 _isLoading.value = false
             }
         }
     }
-
 }
